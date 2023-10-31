@@ -6,8 +6,8 @@ function getComputerChoice(){
 }
 
 function playRound(playerSelection, computerSelection) {
-    let playerSelectionLow = playerSelection.toLowerCase(); 
-    switch (playerSelectionLow) {
+    let result = ''
+    switch (playerSelection) {
         case choiceArr[0]:
           switch (computerSelection) {
             case choiceArr[0]:
@@ -57,7 +57,84 @@ function playRound(playerSelection, computerSelection) {
   return result
 }
 
-const playerSelection = "rock";
-const computerSelection = getComputerChoice();
 
-console.log(playRound(playerSelection, getComputerChoice()));
+function game(){
+    let playerScore = 0;
+    let computerScore = 0;
+    for (let i = 0; i < 6; i++){
+        let round = i
+        console.log('Round ' + i + '. Fight!')
+        let readline = require('readline-sync')
+        let playerChoice = readline.question('Choose your weapon: Rock, Paper or Scissors.')
+        let playerSelection = playerChoice.toLowerCase(); 
+        let computerSelection = getComputerChoice()
+        
+        console.log(playRound(playerSelection,computerSelection));
+        switch (playerSelection){
+            case choiceArr[0]:
+              switch (computerSelection) {
+                case choiceArr[0]:
+                  break;
+                case choiceArr[1]:
+                  computerScore = computerScore + 1
+                  break;
+                case choiceArr[2]:
+                  playerScore = playerScore + 1
+                  break;
+              }
+              break;
+        
+            case choiceArr[1]:
+              switch (computerSelection) {
+                case choiceArr[0]:
+                  playerScore = playerScore + 1
+                  break;
+                case choiceArr[1]:
+                  break;
+                case choiceArr[2]:
+                    computerScore = computerScore + 1
+                  break;
+              }
+              break;
+        
+            case choiceArr[2]:
+              switch (computerSelection) {
+                case choiceArr[0]:
+                  computerScore = computerScore + 1
+                  break;
+                case choiceArr[1]:
+                  playerScore = playerScore + 1
+                  break;
+                case choiceArr[2]:
+                  break;
+              }
+              break;
+        
+            default:
+              i = i-1;
+              break;
+        }
+        console.log('Player Score is ' + playerScore + '.')
+        console.log('Computer Score is ' + computerScore + '.')
+        console.log('--------------------------------')
+    }
+    console.log('')
+    console.log('********************************')
+    console.log('Player Final Score is ' + playerScore)
+    console.log('Computer Final Score is ' + computerScore)
+
+    if (playerScore > computerScore){
+        console.log('Congratulations! You Win!')
+    }
+    else if (playerScore == computerScore){
+        console.log("It's a tie!")
+    }
+    else{
+        console.log('Sorry, you lose!')
+    }
+    console.log('********************************')
+    console.log('')
+}
+
+game()
+
