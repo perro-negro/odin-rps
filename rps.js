@@ -63,12 +63,14 @@ function game(){
     let computerScore = 0;
     for (let i = 0; i < 6; i++){
         let round = i
-        console.log('Round ' + i + '. Fight!')
-        let readline = require('readline-sync')
-        let playerChoice = readline.question('Choose your weapon: Rock, Paper or Scissors.')
+        let roundNum = round + 1
+        console.log('Round ' + roundNum + '. Fight!')
+        let readline = require('readline-sync') // readline allows to get user prompt in nodeJS.
+        let playerChoice = readline.question('Choose your weapon: Rock, Paper or Scissors? ') 
         let playerSelection = playerChoice.toLowerCase(); 
         let computerSelection = getComputerChoice()
         
+        console.log('Computer chose ' + computerSelection + '.');
         console.log(playRound(playerSelection,computerSelection));
         switch (playerSelection){
             case choiceArr[0]:
