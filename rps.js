@@ -1,142 +1,112 @@
-const choiceArr = ['rock', 'paper', 'scissors']
+const choiceList = ['rock', 'paper', 'scissors']
 
 function getComputerChoice(){
     const randomNumber = Math.floor(Math.random() * 3);
-    return choiceArr[randomNumber];
+    return choiceList[randomNumber];
 }
 
 function playRound(playerSelection, computerSelection) {
-    let result = ''
+  let resultList = ['', 0];  
+  
     switch (playerSelection) {
-        case choiceArr[0]:
+        case choiceList[0]:
           switch (computerSelection) {
-            case choiceArr[0]:
-              result = "It's a tie!";
+            case choiceList[0]:
+              resultList[0] = "It's a tie!";
               break;
-            case choiceArr[1]:
-              result = "Computer wins! Paper covers Rock.";
+            case choiceList[1]:
+              resultList[0] = "Computer wins! Paper covers Rock.";
+              resultList[1] = -1
               break;
-            case choiceArr[2]:
-              result = "You win! Rock crushes Scissors.";
+            case choiceList[2]:
+              resultList[0] = "You win! Rock crushes Scissors.";
+              resultList[1] = 1
               break;
           }
           break;
     
-        case choiceArr[1]:
+        case choiceList[1]:
           switch (computerSelection) {
-            case choiceArr[0]:
-              result = "You win! Paper covers Rock.";
+            case choiceList[0]:
+              resultList[0] = "You win! Paper covers Rock.";
+              resultList[1] = 1
               break;
-            case choiceArr[1]:
-              result = "It's a tie!";
+            case choiceList[1]:
+              resultList[0] = "It's a tie!";
               break;
-            case choiceArr[2]:
-              result = "Computer wins! Scissors cut Paper.";
+            case choiceList[2]:
+              resultList[0] = "Computer wins! Scissors cut Paper.";
+              resultList[1] = -1
               break;
           }
           break;
     
-        case choiceArr[2]:
+        case choiceList[2]:
           switch (computerSelection) {
-            case choiceArr[0]:
-              result = "Computer wins! Rock crushes Scissors.";
+            case choiceList[0]:
+              resultList[0] = "Computer wins! Rock crushes Scissors.";
+              resultList[1] = -1
               break;
-            case choiceArr[1]:
-              result = "You win! Scissors cut Paper.";
+            case choiceList[1]:
+              resultList[0] = "You win! Scissors cut Paper.";
+              resultList[1] = 1
               break;
-            case choiceArr[2]:
-              result = "It's a tie!";
+            case choiceList[2]:
+              resultList[0] = "It's a tie!";
               break;
           }
           break;
     
         default:
-          result = "Invalid choice. Please choose 'Rock', 'Paper', or 'Scissors'.";
+          resultList[0] = "Invalid choice. Please choose 'Rock', 'Paper', or 'Scissors'.";
           break;
   }
-  return result
+  return resultList
 }
 
+const rockButton = document.getElementById("rockButton");
+const paperButton = document.getElementById("paperButton");
+const scissorsButton = document.getElementById("scissorsButton");
+const matchContainer = document.getElementById('matchContainer');
+const playerScoreContainer = document.getElementById('playerScoreContainer');
+const computerScoreContainer = document.getElementById('computerScoreContainer');
 
-function game(){
-    let playerScore = 0;
-    let computerScore = 0;
-    for (let i = 0; i < 6; i++){
-        let round = i
-        let roundNum = round + 1
-        console.log('Round ' + roundNum + '. Fight!')
-        let readline = require('readline-sync') // readline allows to get user prompt in nodeJS.
-        let playerChoice = readline.question('Choose your weapon: Rock, Paper or Scissors? ') 
-        let playerSelection = playerChoice.toLowerCase(); 
-        let computerSelection = getComputerChoice()
-        
-        console.log('Computer chose ' + computerSelection + '.');
-        console.log(playRound(playerSelection,computerSelection));
-        switch (playerSelection){
-            case choiceArr[0]:
-              switch (computerSelection) {
-                case choiceArr[0]:
-                  break;
-                case choiceArr[1]:
-                  computerScore = computerScore + 1
-                  break;
-                case choiceArr[2]:
-                  playerScore = playerScore + 1
-                  break;
-              }
-              break;
-        
-            case choiceArr[1]:
-              switch (computerSelection) {
-                case choiceArr[0]:
-                  playerScore = playerScore + 1
-                  break;
-                case choiceArr[1]:
-                  break;
-                case choiceArr[2]:
-                    computerScore = computerScore + 1
-                  break;
-              }
-              break;
-        
-            case choiceArr[2]:
-              switch (computerSelection) {
-                case choiceArr[0]:
-                  computerScore = computerScore + 1
-                  break;
-                case choiceArr[1]:
-                  playerScore = playerScore + 1
-                  break;
-                case choiceArr[2]:
-                  break;
-              }
-              break;
-        
-            default:
-              i = i-1;
-              break;
-        }
-        console.log('Player Score is ' + playerScore + '.')
-        console.log('Computer Score is ' + computerScore + '.')
-        console.log('--------------------------------')
-    }
-    console.log('')
-    console.log('********************************')
-    console.log('Player Final Score is ' + playerScore)
-    console.log('Computer Final Score is ' + computerScore)
+let playerScore = 0;
+let computerScore = 0;
 
-    if (playerScore > computerScore){
-        console.log('Congratulations! You Win!')
-    }
-    else if (playerScore == computerScore){
-        console.log("It's a tie!")
-    }
-    else{
-        console.log('Sorry, you lose!')
-    }
-    console.log('********************************')
-    console.log('')
+function appendMatch(content) {
+  let matchContent = document.createElement('div');
+  matchContent.textContent = content;
+  matchContainer.appendChild(matchContent);
 }
 
-game()
+function game(weapon) {
+  matchContainer.innerHTML = '';
+  let player = weapon;
+  let computer = getComputerChoice();
+  let matchResult = playRound(player,computer);
+  appendMatch('You chose ' + weapon + '.');
+  appendMatch('Computer chose ' + computer + '.');
+  appendMatch(matchResult[0]);
+  if (matchResult[1] == -1){
+    computerScore += 1;
+  }
+  else if (matchResult[1] == 1){
+    playerScore += 1;
+  }
+  computerScoreContainer.textContent = 'Computer Score: ' + computerScore + '.';
+  playerScoreContainer.textContent = 'Player Score: ' + playerScore + '.';
+}
+
+rockButton.addEventListener('click', function () {
+  game('rock');
+});
+
+paperButton.addEventListener('click', function () {
+  game('paper');
+});
+
+scissorsButton.addEventListener('click', function () {
+  game('scissors');
+});
 
